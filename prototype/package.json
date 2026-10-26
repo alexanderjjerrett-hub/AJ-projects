@@ -6,6 +6,8 @@
   "description": "Prototype of the Portes du Soleil mountain guide: ability-aware routing to restaurants, bars, toilets and shops.",
   "scripts": {
     "test": "node --test test/*.test.js",
-    "start": "python3 -m http.server 8080"
+    "start": "python3 -m http.server 8080",
+    "build:terrain": "NODE_USE_ENV_PROXY=1 node scripts/build-terrain-pack.mjs dist/artifact/terrain",
+    "build:artifact": "node scripts/build-artifact.mjs dist/artifact"
   }
 }

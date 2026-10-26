@@ -21,6 +21,15 @@ npm test           # routing, search and query-parser tests (Node 20+)
 
 It needs a connection for map tiles: elevation from AWS Terrain Tiles, plus Esri satellite or OpenTopoMap imagery. If the imagery can't load, it falls back to terrain-only shading automatically. The map library (MapLibre GL JS 5.24.0) is bundled in `vendor/`, so no CDN is needed.
 
+### Hosted copy
+
+A copy is published as a private claude.ai page, so it opens in any browser without running anything. Hosted pages can't load map tiles from other sites, so that copy carries its own **terrain pack** (elevation tiles for the area) and shows the terrain-only background. To rebuild it:
+
+```bash
+npm run build:terrain    # downloads ~26 MB of elevation tiles into dist/artifact/terrain
+npm run build:artifact   # writes dist/artifact/index.html with the CSS and JS inlined
+```
+
 Try typing:
 
 - `cheap lunch near Les Gets, beginner with kids`
@@ -37,6 +46,7 @@ Try typing:
 | `src/search.js` | Ranks POIs by travel time and preferences, and warns about closing times and missing the last lift home |
 | `src/query.js` | Plain-language "occasion" parser |
 | `src/locate.js` | GPS → nearest graph node |
+| `src/terrain-pack.js` | Serves 3D terrain from a bundled terrain pack instead of a tile server |
 | `src/geometry.js` | Turns the graph and routes into map lines (GeoJSON) |
 | `src/app.js` | 3D map (MapLibre GL JS), search panel and results |
 | `vendor/maplibre-gl/` | Bundled MapLibre GL JS 5.24.0 (BSD-3-Clause) |

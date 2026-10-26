@@ -39,3 +39,10 @@ test('route lines follow the direction of travel, including lifts ridden down', 
 test('bounds wraps all coordinates', () => {
   assert.deepEqual(bounds([[6.7, 46.2], [6.6, 46.1], [6.8, 46.15]]), [[6.6, 46.1], [6.8, 46.2]]);
 });
+
+test('terrain pack falls back to the nearest lower-zoom tile', async () => {
+  const { findAncestor } = await import('../src/terrain-pack.js');
+  const available = new Set(['11/1062/726']);
+  assert.deepEqual(findAncestor(available, 13, 4249, 2907), { key: '11/1062/726', dz: 2, subX: 1, subY: 3 });
+  assert.equal(findAncestor(available, 13, 0, 0), null);
+});

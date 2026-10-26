@@ -5,6 +5,7 @@ import { search } from './search.js';
 import { parseQuery } from './query.js';
 import { nearestNode } from './locate.js';
 import { networkGeoJSON, routeGeoJSON, bounds } from './geometry.js';
+import { registerTerrainPack } from './terrain-pack.js';
 
 const graph = { nodes: data.nodes, edges: data.edges, pois: data.pois };
 const nodeById = new Map(data.nodes.map((n) => [n.id, n]));
@@ -17,6 +18,11 @@ const MODE_ICON = { ski: '⛷️', snowboard: '🏂', walk: '🥾' };
 const LEVEL_COLOUR = ['#888888', '#1e9e4a', '#1f6fe0', '#d22f2f', '#111111'];
 
 const TERRAIN_TILES = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png';
+// The hosted build (scripts/build-artifact.mjs) sets this: terrain comes from
+// bundled packs, and backgrounds that need other tile servers are switched off.
+const CONFIG = window.PDS_CONFIG ?? {};
+const PACKED = Boolean(CONFIG.terrainPack);
+const BASEMAPS = CONFIG.basemaps !== false;
 const HOME_VIEW = { center: [6.738, 46.168], zoom: 11.7, pitch: 62, bearing: 20 };
 const ROUTE_PITCH = 58;
 
@@ -33,10 +39,11 @@ let meMarker = null;
 const network = networkGeoJSON(graph);
 const demSource = {
   type: 'raster-dem',
-  tiles: [TERRAIN_TILES],
+  tiles: [PACKED ? 'pack://dem/{z}/{x}/{y}' : TERRAIN_TILES],
   tileSize: 256,
   encoding: 'terrarium',
-  maxzoom: 14,
+  maxzoom: PACKED ? 13 : 14,
+  ...(PACKED && { bounds: [5.5, 45.4, 8.0, 47.0] }),
   attribution: 'Elevation: <a href="https://registry.opendata.aws/terrain-tiles/">AWS Terrain Tiles</a>',
 };
 const levelColour = ['to-color', ['at', ['get', 'level'], ['literal', LEVEL_COLOUR]]];
@@ -82,7 +89,7 @@ const style = {
       },
     },
     { id: 'hillshade', type: 'hillshade', source: 'shade', paint: { 'hillshade-exaggeration': 0.55, 'hillshade-shadow-color': '#26364a' } },
-    { id: 'satellite', type: 'raster', source: 'satellite', layout: { visibility: 'visible' } },
+    { id: 'satellite', type: 'raster', source: 'satellite', layout: { visibility: BASEMAPS ? 'visible' : 'none' } },
     { id: 'topo', type: 'raster', source: 'topo', layout: { visibility: 'none' } },
     { id: 'pistes', type: 'raster', source: 'pistes', layout: { visibility: 'none' } },
     netLayer('net-bus', 'bus', { 'line-color': '#a24fd0', 'line-width': 2.5, 'line-dasharray': [2, 2] }),
@@ -118,9 +125,29 @@ function netLayer(id, type, paint) {
 }
 const NET_LAYERS = ['net-bus', 'net-piste-casing', 'net-piste', 'net-lift-casing', 'net-lift'];
 
+if (!BASEMAPS) {
+  document.querySelector('input[name=base][value=terrain]').checked = true;
+  for (const id of ['satellite', 'topo']) document.querySelector(`input[name=base][value=${id}]`).closest('label').hidden = true;
+  $('#real-pistes').closest('label').hidden = true;
+  $('#layer-menu').prepend(el('p', { class: 'hint' }, 'Satellite and piste-map backgrounds need a live tile service, so this copy shows terrain only.'));
+}
+
 let map = null;
 try {
-  map = new maplibregl.Map({ container: 'map', style, ...HOME_VIEW, maxPitch: 80, attributionControl: { compact: true } });
+  // MapLibre needs absolute tile URLs, so resolve the pack against the page.
+  if (PACKED) registerTerrainPack(maplibregl, new URL(CONFIG.terrainPack, document.baseURI).href).catch((err) => {
+    console.error(err);
+    toast('The 3D terrain couldn’t load. Routes and search still work.');
+  });
+  map = new maplibregl.Map({
+    container: 'map',
+    style,
+    ...HOME_VIEW,
+    maxPitch: 80,
+    attributionControl: { compact: true },
+    // The bundled terrain covers the Portes du Soleil, so keep the camera there.
+    ...(PACKED && { maxBounds: [[6.2, 45.85], [7.3, 46.5]] }),
+  });
   map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'bottom-right');
   map.on('load', () => {
     addPlaceMarkers();
