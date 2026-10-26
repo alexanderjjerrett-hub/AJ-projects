@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PdS Mountain Guide</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>PdS Mountain Guide <span class="badge">prototype</span></h1>
+    <p class="sub">Find the nearest food, drinks, loos and shops that <em>you</em> can get to.</p>
+  </header>
+
+  <main>
+    <section class="panel" aria-label="Your profile">
+      <div class="seg" role="radiogroup" aria-label="How are you getting around?">
+        <label><input type="radio" name="mode" value="ski" checked> ⛷️ Ski</label>
+        <label><input type="radio" name="mode" value="snowboard"> 🏂 Board</label>
+        <label><input type="radio" name="mode" value="walk"> 🥾 On foot</label>
+      </div>
+      <div class="row" id="ability-row">
+        <label for="level">Happy on</label>
+        <select id="level">
+          <option value="1">Green runs (beginner)</option>
+          <option value="2" selected>Blue runs (intermediate)</option>
+          <option value="3">Red runs (confident)</option>
+          <option value="4">Black runs (expert)</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="origin">I'm at</label>
+        <select id="origin"></select>
+        <button id="gps" type="button" title="Use my location">📍</button>
+      </div>
+      <div class="row">
+        <label for="time">Leaving at</label>
+        <input id="time" type="time" value="11:30">
+      </div>
+      <p id="gps-status" class="hint" hidden></p>
+    </section>
+
+    <section class="panel" aria-label="What do you need?">
+      <form id="ask">
+        <input id="q" type="search" placeholder="e.g. cheap lunch near Les Gets for a beginner with kids" autocomplete="off">
+        <button type="submit">Ask</button>
+      </form>
+      <div class="quick">
+        <button data-category="restaurant" data-tags="">🍽️ Lunch</button>
+        <button data-category="bar" data-tags="apres">🍺 Après</button>
+        <button data-category="toilet">🚻 Toilets</button>
+        <button data-category="shop" data-subtype="rental">🔧 Hire / repair</button>
+        <button data-category="shop" data-subtype="pharmacy">💊 Pharmacy</button>
+        <button data-category="shop">🛍️ Shops</button>
+        <button data-category="atm">💶 Cash</button>
+        <button data-category="firstaid">🩹 First aid</button>
+      </div>
+      <p id="understood" class="hint" hidden></p>
+    </section>
+
+    <section aria-label="Results">
+      <ol id="results"></ol>
+    </section>
+
+    <section class="panel" aria-label="Map">
+      <h2>Area map <small>(schematic)</small></h2>
+      <svg id="map" viewBox="0 0 400 260" role="img" aria-label="Schematic map of Morzine, Les Gets and Avoriaz"></svg>
+      <ul class="legend">
+        <li><i class="l1"></i>Green</li><li><i class="l2"></i>Blue</li><li><i class="l3"></i>Red</li><li><i class="l4"></i>Black</li>
+        <li><i class="lift"></i>Lift</li><li><i class="bus"></i>Bus</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    Sample data for Morzine, Les Gets and Avoriaz only. Not for navigation.
+    Follow resort signage and ski patrol. Emergency: <a href="tel:112">112</a>.
+  </footer>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

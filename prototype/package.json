@@ -1,0 +1,11 @@
+{
+  "name": "pds-guide-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Prototype of the Portes du Soleil mountain guide: ability-aware routing to restaurants, bars, toilets and shops.",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "start": "python3 -m http.server 8080"
+  }
+}
