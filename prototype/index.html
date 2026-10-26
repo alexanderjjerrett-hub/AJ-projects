@@ -2,51 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>PdS Mountain Guide</title>
+  <link rel="stylesheet" href="vendor/maplibre-gl/maplibre-gl.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>PdS Mountain Guide <span class="badge">prototype</span></h1>
-    <p class="sub">Find the nearest food, drinks, loos and shops that <em>you</em> can get to.</p>
-  </header>
+  <div id="map" aria-label="3D map of Morzine, Les Gets and Avoriaz"></div>
 
-  <main>
-    <section class="panel" aria-label="Your profile">
-      <div class="seg" role="radiogroup" aria-label="How are you getting around?">
-        <label><input type="radio" name="mode" value="ski" checked> ⛷️ Ski</label>
-        <label><input type="radio" name="mode" value="snowboard"> 🏂 Board</label>
-        <label><input type="radio" name="mode" value="walk"> 🥾 On foot</label>
-      </div>
-      <div class="row" id="ability-row">
-        <label for="level">Happy on</label>
-        <select id="level">
-          <option value="1">Green runs (beginner)</option>
-          <option value="2" selected>Blue runs (intermediate)</option>
-          <option value="3">Red runs (confident)</option>
-          <option value="4">Black runs (expert)</option>
-        </select>
-      </div>
-      <div class="row">
-        <label for="origin">I'm at</label>
-        <select id="origin"></select>
-        <button id="gps" type="button" title="Use my location">📍</button>
-      </div>
-      <div class="row">
-        <label for="time">Leaving at</label>
-        <input id="time" type="time" value="11:30">
-      </div>
-      <p id="gps-status" class="hint" hidden></p>
-    </section>
-
-    <section class="panel" aria-label="What do you need?">
+  <!-- Search & profile: floats at the top on phones, sidebar on wide screens -->
+  <aside id="panel">
+    <div class="card search">
       <form id="ask">
-        <input id="q" type="search" placeholder="e.g. cheap lunch near Les Gets for a beginner with kids" autocomplete="off">
-        <button type="submit">Ask</button>
+        <input id="q" type="search" placeholder="What do you need? e.g. cheap lunch for beginners" autocomplete="off" aria-label="What do you need?">
+        <button type="submit" aria-label="Search">Ask</button>
       </form>
-      <div class="quick">
-        <button data-category="restaurant" data-tags="">🍽️ Lunch</button>
+      <button id="profile-toggle" type="button" aria-expanded="false" aria-controls="profile"></button>
+      <div id="profile" hidden>
+        <div class="seg" role="radiogroup" aria-label="How are you getting around?">
+          <label><input type="radio" name="mode" value="ski" checked> ⛷️ Ski</label>
+          <label><input type="radio" name="mode" value="snowboard"> 🏂 Board</label>
+          <label><input type="radio" name="mode" value="walk"> 🥾 On foot</label>
+        </div>
+        <div class="row" id="ability-row">
+          <label for="level">Happy on</label>
+          <select id="level">
+            <option value="1">Green runs (beginner)</option>
+            <option value="2" selected>Blue runs (intermediate)</option>
+            <option value="3">Red runs (confident)</option>
+            <option value="4">Black runs (expert)</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="origin">I'm at</label>
+          <select id="origin"></select>
+        </div>
+        <div class="row">
+          <label for="time">Leaving at</label>
+          <input id="time" type="time" value="11:30">
+        </div>
+        <p class="hint">Tip: tap a place on the map to start from there, or 📍 to use your location.</p>
+      </div>
+      <div class="quick" role="toolbar" aria-label="Quick searches">
+        <button data-category="restaurant">🍽️ Lunch</button>
         <button data-category="bar" data-tags="apres">🍺 Après</button>
         <button data-category="toilet">🚻 Toilets</button>
         <button data-category="shop" data-subtype="rental">🔧 Hire / repair</button>
@@ -55,28 +53,41 @@
         <button data-category="atm">💶 Cash</button>
         <button data-category="firstaid">🩹 First aid</button>
       </div>
-      <p id="understood" class="hint" hidden></p>
-    </section>
+    </div>
 
-    <section aria-label="Results">
+    <section id="sheet" class="card" hidden aria-label="Results">
+      <button id="sheet-handle" type="button" aria-label="Show or hide results"><span></span></button>
+      <p id="understood" class="hint"></p>
       <ol id="results"></ol>
     </section>
+  </aside>
 
-    <section class="panel" aria-label="Map">
-      <h2>Area map <small>(schematic)</small></h2>
-      <svg id="map" viewBox="0 0 400 260" role="img" aria-label="Schematic map of Morzine, Les Gets and Avoriaz"></svg>
-      <ul class="legend">
-        <li><i class="l1"></i>Green</li><li><i class="l2"></i>Blue</li><li><i class="l3"></i>Red</li><li><i class="l4"></i>Black</li>
-        <li><i class="lift"></i>Lift</li><li><i class="bus"></i>Bus</li>
-      </ul>
-    </section>
-  </main>
+  <div id="map-tools">
+    <button id="gps" type="button" title="Use my location" aria-label="Use my location">📍</button>
+    <button id="toggle-3d" type="button" title="Switch between 3D and flat map" aria-pressed="true">2D</button>
+    <button id="layers" type="button" title="Change map background" aria-label="Change map background">🗺️</button>
+    <div id="layer-menu" hidden>
+      <label><input type="radio" name="base" value="satellite" checked> Satellite</label>
+      <label><input type="radio" name="base" value="topo"> Topographic</label>
+      <label><input type="radio" name="base" value="terrain"> Terrain only (works offline)</label>
+      <hr>
+      <label><input type="checkbox" id="real-pistes"> Real piste map overlay</label>
+      <label><input type="checkbox" id="show-network" checked> App network (sample)</label>
+    </div>
+  </div>
 
-  <footer>
-    Sample data for Morzine, Les Gets and Avoriaz only. Not for navigation.
-    Follow resort signage and ski patrol. Emergency: <a href="tel:112">112</a>.
+  <div id="legend" class="card">
+    <span><i class="l1"></i>Green</span><span><i class="l2"></i>Blue</span><span><i class="l3"></i>Red</span><span><i class="l4"></i>Black</span>
+    <span><i class="lift"></i>Lift</span><span><i class="bus"></i>Bus</span>
+  </div>
+
+  <p id="toast" role="status" hidden></p>
+
+  <footer id="disclaimer">
+    Sample data, not for navigation. Follow resort signage &amp; ski patrol · Emergency <a href="tel:112">112</a>
   </footer>
 
+  <script src="vendor/maplibre-gl/maplibre-gl.js"></script>
   <script type="module" src="src/app.js"></script>
 </body>
 </html>

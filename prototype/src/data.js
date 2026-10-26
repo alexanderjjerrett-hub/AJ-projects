@@ -1,5 +1,6 @@
 // SAMPLE DATA: illustrative only, not for navigation.
-// Village and lift-station locations are approximate. Run lengths, times and
+// Village and lift-station locations are approximate (altitudes checked against
+// the AWS Terrain Tiles elevation model). Run lengths, times and
 // opening hours are placeholders. Venue names are generic, not real businesses.
 // Production data will be built from OpenStreetMap and resort feeds (see docs/DESIGN.md §7).
 
@@ -10,13 +11,13 @@ export const nodes = [
   { id: 'morzine', name: 'Morzine', aliases: ['morzine village'], lat: 46.179, lon: 6.709, alt: 1000, kind: 'village', country: 'FR' },
   { id: 'pleney_top', name: 'Pleney (top)', aliases: ['pleney', 'le pleney'], lat: 46.166, lon: 6.693, alt: 1500, kind: 'station', country: 'FR' },
   { id: 'nauchets', name: 'Les Nauchets', aliases: ['nauchets'], lat: 46.162, lon: 6.68, alt: 1300, kind: 'station', country: 'FR' },
-  { id: 'chavannes', name: 'Chavannes', aliases: ['les chavannes'], lat: 46.15, lon: 6.66, alt: 1490, kind: 'station', country: 'FR' },
+  { id: 'chavannes', name: 'Chavannes', aliases: ['les chavannes'], lat: 46.1405, lon: 6.6705, alt: 1490, kind: 'station', country: 'FR' },
   { id: 'les_gets', name: 'Les Gets', aliases: ['gets', 'les gets village'], lat: 46.158, lon: 6.67, alt: 1170, kind: 'village', country: 'FR' },
   { id: 'super_morzine', name: 'Super Morzine', aliases: ['super-morzine'], lat: 46.196, lon: 6.735, alt: 1690, kind: 'station', country: 'FR' },
   { id: 'avoriaz', name: 'Avoriaz', aliases: ['avoriaz village', 'avoriaz 1800'], lat: 46.192, lon: 6.775, alt: 1800, kind: 'village', country: 'FR' },
-  { id: 'prodains', name: 'Les Prodains', aliases: ['prodains'], lat: 46.201, lon: 6.76, alt: 1480, kind: 'station', country: 'FR' },
+  { id: 'prodains', name: 'Les Prodains', aliases: ['prodains'], lat: 46.1935, lon: 6.7572, alt: 1480, kind: 'station', country: 'FR' },
   { id: 'lindarets', name: 'Les Lindarets', aliases: ['lindarets', 'goat village'], lat: 46.214, lon: 6.77, alt: 1450, kind: 'station', country: 'FR' },
-  { id: 'chavanette', name: 'Chavanette (top of Swiss Wall)', aliases: ['chavanette', 'swiss wall top'], lat: 46.177, lon: 6.81, alt: 2150, kind: 'station', country: 'FR' },
+  { id: 'chavanette', name: 'Chavanette (top of Swiss Wall)', aliases: ['chavanette', 'swiss wall top'], lat: 46.177, lon: 6.8079, alt: 2150, kind: 'station', country: 'FR' },
   { id: 'les_crosets', name: 'Les Crosets', aliases: ['crosets'], lat: 46.184, lon: 6.834, alt: 1660, kind: 'village', country: 'CH' },
 ];
 

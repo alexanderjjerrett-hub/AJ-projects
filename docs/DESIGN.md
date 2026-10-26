@@ -35,6 +35,11 @@ What makes it different from a generic map app is **ability-aware routing**. A n
 ## 4. Feature set
 
 ### 4.1 MVP: "Ask" mode (no GPS)
+- **Map first, in 3D.** The app opens on a full-screen 3D terrain map of the area that can be tilted and rotated, with a 2D option. Search sits on top of the map, and results slide up from the bottom (on phones) or appear in a sidebar (on wide screens).
+  - The chosen route is drawn on the mountainside, coloured by piste grade (lifts and buses in their own styles), and the camera flies to show it.
+  - Each result appears as a numbered pin. Tapping a pin or a list entry selects that result.
+  - Tapping a village or lift station lets you start from there.
+  - Background options: satellite, topographic, or terrain-only (needs only elevation data, so it suits offline packs), with an optional overlay showing the real piste map.
 - **Profile setup** (asked once, can be changed any time):
   - Mode: Ski / Snowboard / On foot
   - Ability: Beginner (green) · Intermediate (blue) · Confident (red) · Expert (black)
@@ -127,6 +132,7 @@ There are 12 resorts across two countries (Avoriaz, Châtel, Morzine, Les Gets, 
 └─────────────────────────┘
 ```
 
+- **3D map:** MapLibre GL JS (open source, no licence fees), drawing elevation tiles as 3D terrain. Pins and labels sit on the terrain, and the network and routes are draped over it. In production the map backgrounds and piste geometry come from a licensed or self-hosted tile provider (e.g. MapTiler, Stadia, or our own OpenStreetMap vector tiles plus a DEM). The free Esri, OpenTopoMap and OpenSnowMap tiles in the prototype are for demonstration only and have usage limits.
 - **Routing runs on the device.** The graph for the whole area is small (thousands of edges), so it works offline and responds instantly. The server only distributes updated data packs and live status.
 - **Prototype:** a dependency-free web app (`/prototype`) that proves the engine and the query parser.
 - **Production candidates:** React Native or Flutter for iOS and Android, MapLibre with offline vector tiles, and SQLite for the data pack.
@@ -149,7 +155,7 @@ There are 12 resorts across two countries (Avoriaz, Châtel, Morzine, Les Gets, 
 
 | Phase | Scope |
 |---|---|
-| **0: Prototype** (this repo) | Sample graph for Morzine, Les Gets and Avoriaz; routing engine; query parser; web UI; "use my location" snapping |
+| **0: Prototype** (this repo) | Sample graph for Morzine, Les Gets and Avoriaz; routing engine; query parser; 3D map web UI; "use my location" snapping |
 | **1: MVP** | Real OSM-derived graph for the three core resorts; verified POIs; iOS/Android beta; FR/EN |
 | **2: GPS & offline** | Live positioning, offline packs, re-routing, whole linked area |
 | **3: Live & partners** | Lift status feeds, weather, bookings, group finder, DE/NL |
