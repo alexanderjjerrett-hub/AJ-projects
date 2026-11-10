@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b2545">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ischgl Nav">
+<title>Ischgl Ski Nav</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="vendor/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="map"></div>
+
+<div id="topbar">
+  <div class="search-wrap">
+    <span class="search-ico">🔍</span>
+    <input id="search" type="search" placeholder="Where to? Huts, bars, lifts, runs…" autocomplete="off" enterkeyhint="search">
+  </div>
+  <button id="btn-settings" class="round" title="Settings" aria-label="Settings">⚙️</button>
+</div>
+
+<div id="fabs">
+  <button id="btn-locate" class="round" title="My location" aria-label="My location">📍</button>
+  <button id="btn-home" class="round" title="Take me home" aria-label="Take me home">🏠</button>
+  <button id="btn-group" class="round" title="The lads" aria-label="Group">👥</button>
+  <button id="btn-info" class="round" title="Legend, help &amp; emergency" aria-label="Info">ℹ️</button>
+</div>
+
+<div id="level-pill" title="Change group level"></div>
+
+<div id="sheet" class="hidden">
+  <div class="sheet-head">
+    <div class="grab"></div>
+    <h2 id="sheet-title"></h2>
+    <button id="sheet-close" aria-label="Close">✕</button>
+  </div>
+  <div id="sheet-body"></div>
+</div>
+
+<div id="toast" class="hidden"></div>
+
+<div id="loading" class="hidden">
+  <div class="loading-card">
+    <div class="spinner"></div>
+    <div id="loading-text">Downloading the piste map for Ischgl &amp; Samnaun…</div>
+  </div>
+</div>
+
+<script src="vendor/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
