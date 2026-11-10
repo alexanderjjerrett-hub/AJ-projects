@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="0" fill="#0b2545"/>
+  <path d="M40 400 L190 170 L250 250 L330 120 L472 400 Z" fill="#ffffff"/>
+  <path d="M190 170 L225 224 L205 214 L188 238 L172 212 L150 232 Z" fill="#cfe0ff"/>
+  <path d="M330 120 L372 205 L346 192 L328 222 L310 196 L288 214 Z" fill="#cfe0ff"/>
+  <path d="M120 400 C200 330 250 330 300 280 S380 220 410 190" fill="none" stroke="#ff2d87" stroke-width="22" stroke-linecap="round" stroke-dasharray="1 44"/>
+  <circle cx="410" cy="190" r="26" fill="#ff2d87" stroke="#fff" stroke-width="8"/>
+  <text x="256" y="470" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="800" fill="#fff" text-anchor="middle">ISCHGL</text>
+</svg>
